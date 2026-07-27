@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cx-as-code-deployment-automation-starter"
+version = "1.0.0"
+description = "Dependency-aware configuration promotion, drift detection, and verification."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "3QInnova LLC" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: MIT License",
+]
+
+[project.scripts]
+cxdeploy = "cxdeploy.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["cxdeploy*"]
+
