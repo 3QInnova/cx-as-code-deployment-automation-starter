@@ -53,6 +53,28 @@ flowchart LR
     Diff --> Rollback["Capture rollback snapshot"]
 ```
 
+### Promotion lifecycle
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Engineer
+    participant Planner as Dependency planner
+    participant Gate as Approval gate
+    participant Adapter as API / Terraform adapter
+    participant Target as Target environment
+    participant Verify as Drift verifier
+
+    Engineer->>Planner: Select root resources
+    Planner->>Planner: Resolve recursive dependencies
+    Planner->>Planner: Reject missing references and cycles
+    Planner-->>Gate: Ordered plan + rollback snapshot
+    Gate->>Adapter: Approve immutable manifest
+    Adapter->>Target: Apply create/update operations
+    Target-->>Verify: Export live configuration
+    Verify-->>Engineer: Match, missing, or different
+```
+
 ## Quick start
 
 Requires Python 3.12 or later.
@@ -138,4 +160,3 @@ patterns and does not contain employer, client, or proprietary source code.
 ## License
 
 MIT
-
