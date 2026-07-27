@@ -1,0 +1,49 @@
+{
+  "environment": "production",
+  "resources": [
+    {
+      "id": "prompt:welcome",
+      "kind": "prompt",
+      "name": "Welcome Prompt",
+      "depends_on": [],
+      "config": {
+        "locale": "en-US",
+        "text": "Welcome."
+      }
+    },
+    {
+      "id": "data-table:customer-tier",
+      "kind": "data_table",
+      "name": "Customer Tier",
+      "depends_on": [],
+      "config": {
+        "key_type": "string",
+        "fields": [
+          "service_level",
+          "priority"
+        ]
+      }
+    },
+    {
+      "id": "queue:customer-care",
+      "kind": "queue",
+      "name": "Customer Care",
+      "depends_on": [],
+      "config": {
+        "routing": "bullseye",
+        "service_level_target": 80
+      }
+    },
+    {
+      "id": "schedule-group:business-hours",
+      "kind": "schedule_group",
+      "name": "Business Hours",
+      "depends_on": [],
+      "config": {
+        "timezone": "America/Denver",
+        "schedule": "weekday"
+      }
+    }
+  ]
+}
+
