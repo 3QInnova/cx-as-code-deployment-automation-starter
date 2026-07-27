@@ -1,0 +1,78 @@
+{
+  "environment": "development",
+  "resources": [
+    {
+      "id": "prompt:welcome",
+      "kind": "prompt",
+      "name": "Welcome Prompt",
+      "depends_on": [],
+      "config": {
+        "locale": "en-US",
+        "text": "Welcome. How may we help?"
+      }
+    },
+    {
+      "id": "data-table:customer-tier",
+      "kind": "data_table",
+      "name": "Customer Tier",
+      "depends_on": [],
+      "config": {
+        "key_type": "string",
+        "fields": [
+          "service_level",
+          "priority"
+        ]
+      }
+    },
+    {
+      "id": "data-action:account-lookup",
+      "kind": "data_action",
+      "name": "Account Lookup",
+      "depends_on": [
+        "data-table:customer-tier"
+      ],
+      "config": {
+        "method": "POST",
+        "path": "/v1/accounts/lookup",
+        "timeout_ms": 3000
+      }
+    },
+    {
+      "id": "queue:customer-care",
+      "kind": "queue",
+      "name": "Customer Care",
+      "depends_on": [],
+      "config": {
+        "routing": "bullseye",
+        "service_level_target": 80
+      }
+    },
+    {
+      "id": "schedule-group:business-hours",
+      "kind": "schedule_group",
+      "name": "Business Hours",
+      "depends_on": [],
+      "config": {
+        "timezone": "America/Denver",
+        "schedule": "weekday"
+      }
+    },
+    {
+      "id": "flow:customer-service",
+      "kind": "inbound_flow",
+      "name": "Customer Service",
+      "depends_on": [
+        "prompt:welcome",
+        "data-action:account-lookup",
+        "queue:customer-care",
+        "schedule-group:business-hours"
+      ],
+      "config": {
+        "version": 7,
+        "entry_task": "main-menu",
+        "secure_inputs": true
+      }
+    }
+  ]
+}
+
